@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/badshun/gb_emulator/build",
+  "command": "/usr/bin/cc  -I/home/badshun/gb_emulator/include -g -std=gnu99 -o CMakeFiles/gb_emulator.dir/src/cart.c.o -c /home/badshun/gb_emulator/src/cart.c",
+  "file": "/home/badshun/gb_emulator/src/cart.c",
+  "output": "CMakeFiles/gb_emulator.dir/src/cart.c.o"
+},
+{
+  "directory": "/home/badshun/gb_emulator/build",
+  "command": "/usr/bin/cc  -I/home/badshun/gb_emulator/include -g -std=gnu99 -o CMakeFiles/gb_emulator.dir/src/main.c.o -c /home/badshun/gb_emulator/src/main.c",
+  "file": "/home/badshun/gb_emulator/src/main.c",
+  "output": "CMakeFiles/gb_emulator.dir/src/main.c.o"
+}
+]

@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/gb_emulator.dir/src/cart.c.o CMakeFiles/gb_emulator.dir/src/main.c.o -o gb_emulator 

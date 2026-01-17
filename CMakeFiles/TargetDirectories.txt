@@ -1,0 +1,3 @@
+/home/badshun/gb_emulator/CMakeFiles/gb_emulator.dir
+/home/badshun/gb_emulator/CMakeFiles/edit_cache.dir
+/home/badshun/gb_emulator/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,7 @@
+
+IndentWidth: 4          # 缩进 4 个空格
+TabWidth: 4
+UseTab: Never           # Never = 空格缩进，Always = Tab
+ContinuationIndentWidth: 4
+
+ColumnLimit: 120            # 一行最大长度，0 表示不限制
