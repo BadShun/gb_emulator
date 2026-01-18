@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/badshun/gb_emulator/src/cart.c" "CMakeFiles/gb_emulator.dir/src/cart.c.o" "gcc" "CMakeFiles/gb_emulator.dir/src/cart.c.o.d"
+  "/home/badshun/gb_emulator/src/cpu.c" "CMakeFiles/gb_emulator.dir/src/cpu.c.o" "gcc" "CMakeFiles/gb_emulator.dir/src/cpu.c.o.d"
   "/home/badshun/gb_emulator/src/main.c" "CMakeFiles/gb_emulator.dir/src/main.c.o" "gcc" "CMakeFiles/gb_emulator.dir/src/main.c.o.d"
   )
 

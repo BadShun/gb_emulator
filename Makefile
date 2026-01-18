@@ -153,6 +153,30 @@ src/cart.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/cart.c.s
 .PHONY : src/cart.c.s
 
+src/cpu.o: src/cpu.c.o
+.PHONY : src/cpu.o
+
+# target to build an object file
+src/cpu.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/cpu.c.o
+.PHONY : src/cpu.c.o
+
+src/cpu.i: src/cpu.c.i
+.PHONY : src/cpu.i
+
+# target to preprocess a source file
+src/cpu.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/cpu.c.i
+.PHONY : src/cpu.c.i
+
+src/cpu.s: src/cpu.c.s
+.PHONY : src/cpu.s
+
+# target to generate assembly for a file
+src/cpu.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/cpu.c.s
+.PHONY : src/cpu.c.s
+
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -189,6 +213,9 @@ help:
 	@echo "... src/cart.o"
 	@echo "... src/cart.i"
 	@echo "... src/cart.s"
+	@echo "... src/cpu.o"
+	@echo "... src/cpu.i"
+	@echo "... src/cpu.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

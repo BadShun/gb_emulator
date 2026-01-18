@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/gb_emulator.dir/src/cart.c.o"
   "CMakeFiles/gb_emulator.dir/src/cart.c.o.d"
+  "CMakeFiles/gb_emulator.dir/src/cpu.c.o"
+  "CMakeFiles/gb_emulator.dir/src/cpu.c.o.d"
   "CMakeFiles/gb_emulator.dir/src/main.c.o"
   "CMakeFiles/gb_emulator.dir/src/main.c.o.d"
   "gb_emulator"
