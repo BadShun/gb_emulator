@@ -1,22 +1,22 @@
 #ifndef __CART_H
 #define __CART_H
 
-#include "common.h"
+#include <stdint.h>
 
 typedef struct {
-    uint_8 entry_point[4];
-    uint_8 logo[0x30];
+    uint8_t entry_point[4];
+    uint8_t logo[0x30];
     char title[16];
-    uint_8 new_lic_code[2];
-    uint_8 sgb_flag;
-    uint_8 cart_type;
-    uint_8 rom_size;
-    uint_8 ram_size;
-    uint_8 dest_code;
-    uint_8 old_lic_code;
-    uint_8 mask_rom_version_number;
-    uint_8 header_checksum;
-    uint_8 global_checksum[2];
+    uint8_t new_lic_code[2];
+    uint8_t sgb_flag;
+    uint8_t cart_type;
+    uint8_t rom_size;
+    uint8_t ram_size;
+    uint8_t dest_code;
+    uint8_t old_lic_code;
+    uint8_t mask_rom_version_number;
+    uint8_t header_checksum;
+    uint8_t global_checksum[2];
 } cart_header;
 
 static const char *ROM_TYPES[] = {
@@ -67,9 +67,7 @@ static const char *RAM_SIZE_TYPES[] = {
 };
 
 void cart_init(const char *cart_path);
-static const int cart_read(const char *cart_path);
-static const char *get_cart_type(uint_8 type);
-static const char *get_cart_ram_size(uint_8 ram_size_code);
-static const char *get_cart_lic_code(uint_8 lic_code);
+uint8_t cart_mem_read(uint16_t addr);
+void cart_mem_write(uint16_t addr, uint8_t data);
 
 #endif

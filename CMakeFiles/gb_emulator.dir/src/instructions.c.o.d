@@ -1,6 +1,7 @@
-CMakeFiles/gb_emulator.dir/src/main.c.o: \
- /home/badshun/gb_emulator/src/main.c /usr/include/stdc-predef.h \
- /home/badshun/gb_emulator/include/cart.h \
+CMakeFiles/gb_emulator.dir/src/instructions.c.o: \
+ /home/badshun/gb_emulator/src/instructions.c /usr/include/stdc-predef.h \
+ /home/badshun/gb_emulator/include/instructions.h \
+ /home/badshun/gb_emulator/include/cpu.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -17,5 +18,6 @@ CMakeFiles/gb_emulator.dir/src/main.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
- /home/badshun/gb_emulator/include/cpu.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
+ /home/badshun/gb_emulator/include/bus.h \
+ /home/badshun/gb_emulator/include/cpu.h

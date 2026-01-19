@@ -1,1 +1,1 @@
-/usr/bin/cc CMakeFiles/gb_emulator.dir/src/cart.c.o CMakeFiles/gb_emulator.dir/src/cpu.c.o CMakeFiles/gb_emulator.dir/src/main.c.o -o gb_emulator 
+/usr/bin/cc CMakeFiles/gb_emulator.dir/src/bus.c.o CMakeFiles/gb_emulator.dir/src/cart.c.o CMakeFiles/gb_emulator.dir/src/cpu.c.o CMakeFiles/gb_emulator.dir/src/instructions.c.o CMakeFiles/gb_emulator.dir/src/main.c.o -o gb_emulator 

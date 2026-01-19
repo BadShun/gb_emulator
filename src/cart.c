@@ -1,6 +1,6 @@
 #include "cart.h"
-#include "common.h"
 
+#include <stdint.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,8 +11,13 @@
 #define POSIX
 #define DEBUG
 
-static uint_8 *rom_data = NULL;
-static uint_32 rom_size;
+static int cart_read(const char *cart_path);
+static const char *get_cart_type(uint8_t type);
+static const char *get_cart_ram_size(uint8_t ram_size_code);
+static const char *get_cart_lic_code(uint8_t lic_code);
+
+static uint8_t *rom_data = NULL;
+static uint32_t rom_size;
 
 void cart_init(const char *cart_path) {
     if (cart_read(cart_path)) {
@@ -31,7 +36,7 @@ void cart_init(const char *cart_path) {
 #endif
 }
 
-static const int cart_read(const char *cart_path) {
+static int cart_read(const char *cart_path) {
 #ifdef POSIX
     int fd = open(cart_path, O_RDONLY);
     if (fd < 0) {
@@ -52,7 +57,7 @@ static const int cart_read(const char *cart_path) {
     return 0;
 }
 
-static const char *get_cart_type(uint_8 type) {
+static const char *get_cart_type(uint8_t type) {
     if (type <= 0x22) {
         return ROM_TYPES[type];
     }
@@ -60,7 +65,7 @@ static const char *get_cart_type(uint_8 type) {
     return "UNKNOWN";
 }
 
-static const char *get_cart_ram_size(uint_8 ram_size_code) {
+static const char *get_cart_ram_size(uint8_t ram_size_code) {
     if (ram_size_code <= 0x05) {
         return RAM_SIZE_TYPES[ram_size_code];
     }
@@ -68,7 +73,7 @@ static const char *get_cart_ram_size(uint_8 ram_size_code) {
     return "UNKNOWN";
 }
 
-static const char *get_cart_lic_code(uint_8 lic_code) {
+static const char *get_cart_lic_code(uint8_t lic_code) {
     switch (lic_code) {
         case 0x00: return "None";
         case 0x01: return "Nintendo R&D1";
@@ -135,4 +140,12 @@ static const char *get_cart_lic_code(uint_8 lic_code) {
     }
 
     return "UNKNOWN";
+}
+
+uint8_t cart_mem_read(uint16_t addr) {
+    return rom_data[addr];
+}
+
+void cart_mem_write(uint16_t addr, uint8_t data) {
+    printf("unsupport cart write\n");
 }

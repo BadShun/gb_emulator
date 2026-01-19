@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "cart.h"
 #include "cpu.h"
 

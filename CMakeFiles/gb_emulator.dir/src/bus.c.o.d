@@ -1,6 +1,6 @@
-CMakeFiles/gb_emulator.dir/src/cpu.c.o: \
- /home/badshun/gb_emulator/src/cpu.c /usr/include/stdc-predef.h \
- /home/badshun/gb_emulator/include/cpu.h \
+CMakeFiles/gb_emulator.dir/src/bus.c.o: \
+ /home/badshun/gb_emulator/src/bus.c /usr/include/stdc-predef.h \
+ /home/badshun/gb_emulator/include/bus.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -17,7 +17,7 @@ CMakeFiles/gb_emulator.dir/src/cpu.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h /usr/include/stdio.h \
+ /home/badshun/gb_emulator/include/cart.h /usr/include/stdio.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
