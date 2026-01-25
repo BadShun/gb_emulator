@@ -1,7 +1,12 @@
 #include "cpu.h"
+#include "bus.h"
+#include "instructions.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+
+#define DEBUG
 
 static emu_cpu cpu;
 
@@ -15,6 +20,25 @@ void cpu_init() {
     set_HL(0x014D);
     cpu.reg.sp = 0xFFFE;
     cpu.reg.pc = 0x0100;
+}
+
+void cpu_step() {
+    if (!cpu.halted) {
+        uint8_t opcode = bus_read(cpu.reg.pc);
+        cpu.reg.pc++;
+        const instruction_func_t instruction = instruction_set[opcode >> 4][opcode & 0x0F];;
+#ifdef DEBUG
+        printf("OPERATION CODE:0x%02x\n", opcode);
+        print_reg();
+#endif        
+        instruction(&cpu);
+    } else {
+        cpu.cycles += 1;
+    }
+}
+
+void enable_interrupt() {
+
 }
 
 uint16_t get_AF() {

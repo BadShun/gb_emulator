@@ -40,6 +40,8 @@ void set_H(uint8_t v);
 void set_C(uint8_t v);
 
 void cpu_init();
+void cpu_step();
+void enable_interrupt();
 void print_reg();
 
 #endif

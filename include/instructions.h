@@ -5,4 +5,6 @@
 
 typedef void (*instruction_func_t)(emu_cpu *cpu);
 
+extern const instruction_func_t instruction_set[16][16];
+
 #endif

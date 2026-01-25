@@ -69,10 +69,24 @@ include CMakeFiles/gb_emulator.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/gb_emulator.dir/flags.make
 
+CMakeFiles/gb_emulator.dir/src/bus.c.o: CMakeFiles/gb_emulator.dir/flags.make
+CMakeFiles/gb_emulator.dir/src/bus.c.o: /home/badshun/gb_emulator/src/bus.c
+CMakeFiles/gb_emulator.dir/src/bus.c.o: CMakeFiles/gb_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/badshun/gb_emulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/gb_emulator.dir/src/bus.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/gb_emulator.dir/src/bus.c.o -MF CMakeFiles/gb_emulator.dir/src/bus.c.o.d -o CMakeFiles/gb_emulator.dir/src/bus.c.o -c /home/badshun/gb_emulator/src/bus.c
+
+CMakeFiles/gb_emulator.dir/src/bus.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/gb_emulator.dir/src/bus.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/badshun/gb_emulator/src/bus.c > CMakeFiles/gb_emulator.dir/src/bus.c.i
+
+CMakeFiles/gb_emulator.dir/src/bus.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/gb_emulator.dir/src/bus.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/badshun/gb_emulator/src/bus.c -o CMakeFiles/gb_emulator.dir/src/bus.c.s
+
 CMakeFiles/gb_emulator.dir/src/cart.c.o: CMakeFiles/gb_emulator.dir/flags.make
 CMakeFiles/gb_emulator.dir/src/cart.c.o: /home/badshun/gb_emulator/src/cart.c
 CMakeFiles/gb_emulator.dir/src/cart.c.o: CMakeFiles/gb_emulator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/badshun/gb_emulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/gb_emulator.dir/src/cart.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/badshun/gb_emulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/gb_emulator.dir/src/cart.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/gb_emulator.dir/src/cart.c.o -MF CMakeFiles/gb_emulator.dir/src/cart.c.o.d -o CMakeFiles/gb_emulator.dir/src/cart.c.o -c /home/badshun/gb_emulator/src/cart.c
 
 CMakeFiles/gb_emulator.dir/src/cart.c.i: cmake_force
@@ -83,10 +97,38 @@ CMakeFiles/gb_emulator.dir/src/cart.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/gb_emulator.dir/src/cart.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/badshun/gb_emulator/src/cart.c -o CMakeFiles/gb_emulator.dir/src/cart.c.s
 
+CMakeFiles/gb_emulator.dir/src/cpu.c.o: CMakeFiles/gb_emulator.dir/flags.make
+CMakeFiles/gb_emulator.dir/src/cpu.c.o: /home/badshun/gb_emulator/src/cpu.c
+CMakeFiles/gb_emulator.dir/src/cpu.c.o: CMakeFiles/gb_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/badshun/gb_emulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/gb_emulator.dir/src/cpu.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/gb_emulator.dir/src/cpu.c.o -MF CMakeFiles/gb_emulator.dir/src/cpu.c.o.d -o CMakeFiles/gb_emulator.dir/src/cpu.c.o -c /home/badshun/gb_emulator/src/cpu.c
+
+CMakeFiles/gb_emulator.dir/src/cpu.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/gb_emulator.dir/src/cpu.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/badshun/gb_emulator/src/cpu.c > CMakeFiles/gb_emulator.dir/src/cpu.c.i
+
+CMakeFiles/gb_emulator.dir/src/cpu.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/gb_emulator.dir/src/cpu.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/badshun/gb_emulator/src/cpu.c -o CMakeFiles/gb_emulator.dir/src/cpu.c.s
+
+CMakeFiles/gb_emulator.dir/src/instructions.c.o: CMakeFiles/gb_emulator.dir/flags.make
+CMakeFiles/gb_emulator.dir/src/instructions.c.o: /home/badshun/gb_emulator/src/instructions.c
+CMakeFiles/gb_emulator.dir/src/instructions.c.o: CMakeFiles/gb_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/badshun/gb_emulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/gb_emulator.dir/src/instructions.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/gb_emulator.dir/src/instructions.c.o -MF CMakeFiles/gb_emulator.dir/src/instructions.c.o.d -o CMakeFiles/gb_emulator.dir/src/instructions.c.o -c /home/badshun/gb_emulator/src/instructions.c
+
+CMakeFiles/gb_emulator.dir/src/instructions.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/gb_emulator.dir/src/instructions.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/badshun/gb_emulator/src/instructions.c > CMakeFiles/gb_emulator.dir/src/instructions.c.i
+
+CMakeFiles/gb_emulator.dir/src/instructions.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/gb_emulator.dir/src/instructions.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/badshun/gb_emulator/src/instructions.c -o CMakeFiles/gb_emulator.dir/src/instructions.c.s
+
 CMakeFiles/gb_emulator.dir/src/main.c.o: CMakeFiles/gb_emulator.dir/flags.make
 CMakeFiles/gb_emulator.dir/src/main.c.o: /home/badshun/gb_emulator/src/main.c
 CMakeFiles/gb_emulator.dir/src/main.c.o: CMakeFiles/gb_emulator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/badshun/gb_emulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/gb_emulator.dir/src/main.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/badshun/gb_emulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/gb_emulator.dir/src/main.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/gb_emulator.dir/src/main.c.o -MF CMakeFiles/gb_emulator.dir/src/main.c.o.d -o CMakeFiles/gb_emulator.dir/src/main.c.o -c /home/badshun/gb_emulator/src/main.c
 
 CMakeFiles/gb_emulator.dir/src/main.c.i: cmake_force
@@ -99,17 +141,23 @@ CMakeFiles/gb_emulator.dir/src/main.c.s: cmake_force
 
 # Object files for target gb_emulator
 gb_emulator_OBJECTS = \
+"CMakeFiles/gb_emulator.dir/src/bus.c.o" \
 "CMakeFiles/gb_emulator.dir/src/cart.c.o" \
+"CMakeFiles/gb_emulator.dir/src/cpu.c.o" \
+"CMakeFiles/gb_emulator.dir/src/instructions.c.o" \
 "CMakeFiles/gb_emulator.dir/src/main.c.o"
 
 # External object files for target gb_emulator
 gb_emulator_EXTERNAL_OBJECTS =
 
+gb_emulator: CMakeFiles/gb_emulator.dir/src/bus.c.o
 gb_emulator: CMakeFiles/gb_emulator.dir/src/cart.c.o
+gb_emulator: CMakeFiles/gb_emulator.dir/src/cpu.c.o
+gb_emulator: CMakeFiles/gb_emulator.dir/src/instructions.c.o
 gb_emulator: CMakeFiles/gb_emulator.dir/src/main.c.o
 gb_emulator: CMakeFiles/gb_emulator.dir/build.make
 gb_emulator: CMakeFiles/gb_emulator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/badshun/gb_emulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable gb_emulator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/badshun/gb_emulator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C executable gb_emulator"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gb_emulator.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

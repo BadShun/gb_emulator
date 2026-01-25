@@ -129,6 +129,30 @@ gb_emulator/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/build
 .PHONY : gb_emulator/fast
 
+src/bus.o: src/bus.c.o
+.PHONY : src/bus.o
+
+# target to build an object file
+src/bus.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/bus.c.o
+.PHONY : src/bus.c.o
+
+src/bus.i: src/bus.c.i
+.PHONY : src/bus.i
+
+# target to preprocess a source file
+src/bus.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/bus.c.i
+.PHONY : src/bus.c.i
+
+src/bus.s: src/bus.c.s
+.PHONY : src/bus.s
+
+# target to generate assembly for a file
+src/bus.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/bus.c.s
+.PHONY : src/bus.c.s
+
 src/cart.o: src/cart.c.o
 .PHONY : src/cart.o
 
@@ -152,6 +176,54 @@ src/cart.s: src/cart.c.s
 src/cart.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/cart.c.s
 .PHONY : src/cart.c.s
+
+src/cpu.o: src/cpu.c.o
+.PHONY : src/cpu.o
+
+# target to build an object file
+src/cpu.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/cpu.c.o
+.PHONY : src/cpu.c.o
+
+src/cpu.i: src/cpu.c.i
+.PHONY : src/cpu.i
+
+# target to preprocess a source file
+src/cpu.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/cpu.c.i
+.PHONY : src/cpu.c.i
+
+src/cpu.s: src/cpu.c.s
+.PHONY : src/cpu.s
+
+# target to generate assembly for a file
+src/cpu.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/cpu.c.s
+.PHONY : src/cpu.c.s
+
+src/instructions.o: src/instructions.c.o
+.PHONY : src/instructions.o
+
+# target to build an object file
+src/instructions.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/instructions.c.o
+.PHONY : src/instructions.c.o
+
+src/instructions.i: src/instructions.c.i
+.PHONY : src/instructions.i
+
+# target to preprocess a source file
+src/instructions.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/instructions.c.i
+.PHONY : src/instructions.c.i
+
+src/instructions.s: src/instructions.c.s
+.PHONY : src/instructions.s
+
+# target to generate assembly for a file
+src/instructions.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/instructions.c.s
+.PHONY : src/instructions.c.s
 
 src/main.o: src/main.c.o
 .PHONY : src/main.o
@@ -186,9 +258,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... gb_emulator"
+	@echo "... src/bus.o"
+	@echo "... src/bus.i"
+	@echo "... src/bus.s"
 	@echo "... src/cart.o"
 	@echo "... src/cart.i"
 	@echo "... src/cart.s"
+	@echo "... src/cpu.o"
+	@echo "... src/cpu.i"
+	@echo "... src/cpu.s"
+	@echo "... src/instructions.o"
+	@echo "... src/instructions.i"
+	@echo "... src/instructions.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
