@@ -268,12 +268,12 @@ static inline void x4b_ld_c_e(emu_cpu *cpu) {
 }
 
 static inline void x4c_ld_c_h(emu_cpu *cpu) {
-    cpu->reg.c = cpu->reg.b;
+    cpu->reg.c = cpu->reg.h;
     cpu->cycles += 1;
 }
 
 static inline void x4d_ld_c_l(emu_cpu *cpu) {
-    cpu->reg.c = cpu->reg.b;
+    cpu->reg.c = cpu->reg.l;
     cpu->cycles += 1;
 }
 
