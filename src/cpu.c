@@ -94,19 +94,19 @@ uint8_t flag_C() {
 }
 
 void set_Z(uint8_t v) {
-    cpu.reg.f = ((cpu.reg.f & 0x7F) | v << 7);
+    cpu.reg.f = ((cpu.reg.f & 0x7F) | (v & 1) << 7);
 }
 
 void set_N(uint8_t v) {
-    cpu.reg.f = ((cpu.reg.f & 0xBF) | v << 6);
+    cpu.reg.f = ((cpu.reg.f & 0xBF) | (v & 1) << 6);
 }
 
 void set_H(uint8_t v) {
-    cpu.reg.f = ((cpu.reg.f & 0xDF) | v << 8);
+    cpu.reg.f = ((cpu.reg.f & 0xDF) | (v & 1) << 5);
 }
 
 void set_C(uint8_t v) {
-    cpu.reg.f = ((cpu.reg.f & 0xEF) | v << 4);
+    cpu.reg.f = ((cpu.reg.f & 0xEF) | (v & 1) << 4);
 }
 
 void print_reg() {

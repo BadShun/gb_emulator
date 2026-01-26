@@ -38,6 +38,37 @@ static inline uint16_t pop_16(emu_cpu *cpu) {
     return u16;
 }
 
+static inline void inc_8(emu_cpu *cpu, uint8_t *v) {
+    (*v)++;
+    set_Z(*v == 0);
+    set_N(0);
+    set_H((*v & 0x0F) == 0x00);
+}
+
+static inline void dec_8(emu_cpu *cpu, uint8_t *v) {
+    (*v)--;
+    set_Z(*v == 0);
+    set_N(1);
+    set_H((*v & 0x0F) == 0x0F);
+}
+
+static inline uint8_t add_8(uint16_t v1, uint16_t v2) {
+    uint8_t r = (uint8_t)(v1 + v2); 
+    set_Z(r == 0);
+    set_N(0);
+    set_H(((v1 & 0x0F) + (v2 & 0x0F)) > 0x0F);
+    set_C((v1 + v2) > 0xFF);
+    return r;
+}
+
+static inline uint16_t add_16(uint32_t v1, uint32_t v2) {
+    uint16_t r = (uint16_t)(v1 + v2);
+    set_N(0);
+    set_H(((v1 & 0x0FFF) + (v2 & 0x0FFF)) > 0x0FFF);
+    set_C((v1 + v2) > 0xFFFF);
+    return r;
+}
+
 static inline void x00_nop(emu_cpu *cpu) {
     cpu->cycles += 1;
 }
@@ -52,6 +83,21 @@ static inline void x02_ld_mbc_a(emu_cpu *cpu) {
     cpu->cycles += 2;
 }
 
+static inline void x03_inc_bc(emu_cpu *cpu) {
+    set_BC(get_BC() + 1);
+    cpu->cycles += 2;
+}
+
+static inline void x04_inc_b(emu_cpu *cpu) {
+    inc_8(cpu, &cpu->reg.b);
+    cpu->cycles += 1;
+}
+
+static inline void x05_dec_b(emu_cpu *cpu) {
+    dec_8(cpu, &cpu->reg.b);
+    cpu->cycles += 1;
+}
+
 static inline void x06_ld_b_d8(emu_cpu *cpu) {
     cpu->reg.b = read_d8(cpu);
     cpu->cycles += 2;
@@ -62,13 +108,33 @@ static inline void x08_ld_a16_sp(emu_cpu *cpu) {
     cpu->cycles += 2;
     bus_write(a16, (uint8_t)(cpu->reg.sp & 0xFF));
     cpu->cycles += 1;
-    bus_write(a16 + 1, (uint8_t)cpu->reg.sp >> 8);
+    bus_write(a16 + 1, (uint8_t)(cpu->reg.sp >> 8));
+    cpu->cycles += 2;
+}
+
+static inline void x09_add_hl_bc(emu_cpu *cpu) {
+    set_HL(add_16(get_HL(), get_BC()));
     cpu->cycles += 2;
 }
 
 static inline void x0a_ld_a_mbc(emu_cpu *cpu) {
     cpu->reg.a = bus_read(get_BC());
     cpu->cycles += 2;
+}
+
+static inline void x0b_dec_bc(emu_cpu *cpu) {
+    set_BC(get_BC() - 1);
+    cpu->cycles += 2;
+}
+
+static inline void x0c_inc_c(emu_cpu *cpu) {
+    inc_8(cpu, &cpu->reg.c);
+    cpu->cycles += 1;
+}
+
+static inline void x0d_dec_c(emu_cpu *cpu) {
+    dec_8(cpu, &cpu->reg.c);
+    cpu->cycles += 1;
 }
 
 static inline void x0e_ld_c_d8(emu_cpu *cpu) {
@@ -86,6 +152,21 @@ static inline void x12_ld_mde_a(emu_cpu *cpu) {
     cpu->cycles += 2;
 }
 
+static inline void x13_inc_de(emu_cpu *cpu) {
+    set_DE(get_DE() + 1);
+    cpu->cycles += 2;
+}
+
+static inline void x14_inc_d(emu_cpu *cpu) {
+    inc_8(cpu, &cpu->reg.d);
+    cpu->cycles += 1;
+}
+
+static inline void x15_dec_d(emu_cpu *cpu) {
+    dec_8(cpu, &cpu->reg.d);
+    cpu->cycles += 1;
+}
+
 static inline void x16_ld_d_d8(emu_cpu *cpu) {
     cpu->reg.d = read_d8(cpu);
     cpu->cycles += 2;
@@ -97,9 +178,29 @@ static inline void x18_jr_r8(emu_cpu *cpu) {
     cpu->cycles += 3;
 }
 
+static inline void x19_add_hl_de(emu_cpu *cpu) {
+    set_HL(add_16(get_HL(), get_DE()));
+    cpu->cycles += 2;
+}
+
 static inline void x1a_ld_a_mde(emu_cpu *cpu) {
     cpu->reg.a = bus_read(get_DE());
     cpu->cycles += 2;
+}
+
+static inline void x1b_dec_de(emu_cpu *cpu) {
+    set_DE(get_DE() - 1);
+    cpu->cycles += 2;
+}
+
+static inline void x1c_inc_e(emu_cpu *cpu) {
+    inc_8(cpu, &cpu->reg.e);
+    cpu->cycles += 1;
+}
+
+static inline void x1d_dec_e(emu_cpu *cpu) {
+    dec_8(cpu, &cpu->reg.e);
+    cpu->cycles += 1;
 }
 
 static inline void x1e_ld_e_d8(emu_cpu *cpu) {
@@ -129,6 +230,21 @@ static inline void x22_ldi_mhl_a(emu_cpu *cpu) {
     cpu->cycles += 2;
 }
 
+static inline void x23_inc_hl(emu_cpu *cpu) {
+    set_HL(get_HL() + 1);
+    cpu->cycles += 2;
+}
+
+static inline void x24_inc_h(emu_cpu *cpu) {
+    inc_8(cpu, &cpu->reg.h);
+    cpu->cycles += 1;
+}
+
+static inline void x25_dec_h(emu_cpu *cpu) {
+    dec_8(cpu, &cpu->reg.h);
+    cpu->cycles += 1;
+}
+
 static inline void x26_ld_h_d8(emu_cpu *cpu) {
     cpu->reg.h = read_d8(cpu);
     cpu->cycles += 2;
@@ -145,10 +261,30 @@ static inline void x28_jr_z_r8(emu_cpu *cpu) {
     }
 }
 
+static inline void x29_add_hl_hl(emu_cpu *cpu) {
+    set_HL(add_16(get_HL(), get_HL()));
+    cpu->cycles += 2;
+}
+
 static inline void x2a_ldi_a_mhl(emu_cpu *cpu) {
     cpu->reg.a = bus_read(get_HL());
     set_HL(get_HL() + 1);
     cpu->cycles +=2;
+}
+
+static inline void x2b_dec_hl(emu_cpu *cpu) {
+    set_HL(get_HL() - 1);
+    cpu->cycles += 2;
+}
+
+static inline void x2c_inc_l(emu_cpu *cpu) {
+    inc_8(cpu, &cpu->reg.l);
+    cpu->cycles += 1;
+}
+
+static inline void x2d_dec_l(emu_cpu *cpu) {
+    dec_8(cpu, &cpu->reg.l);
+    cpu->cycles += 1;
 }
 
 static inline void x2e_ld_l_d8(emu_cpu *cpu) {
@@ -178,6 +314,27 @@ static inline void x32_ldd_mhl_a(emu_cpu *cpu) {
     cpu->cycles += 2;
 }
 
+static inline void x33_inc_sp(emu_cpu *cpu) {
+    cpu->reg.sp++;
+    cpu->cycles += 2;
+}
+
+static inline void x34_inc_mhl(emu_cpu *cpu) {
+    uint8_t data = bus_read(get_HL());
+    cpu->cycles += 1;
+    inc_8(cpu, &data);
+    bus_write(get_HL(), data);
+    cpu->cycles += 2;
+}
+
+static inline void x35_dec_mhl(emu_cpu *cpu) {
+    uint8_t data = bus_read(get_HL());
+    cpu->cycles += 1;
+    dec_8(cpu, &data);
+    bus_write(get_HL(), data);
+    cpu->cycles += 2;
+}
+
 static inline void x36_ld_mhl_d8(emu_cpu *cpu) {
     uint8_t d8 = read_d8(cpu);
     cpu->cycles += 1;
@@ -196,10 +353,30 @@ static inline void x38_jr_c_r8(emu_cpu *cpu) {
     }
 }
 
+static inline void x39_add_hl_sp(emu_cpu *cpu) {
+    set_HL(add_16(get_HL(), cpu->reg.sp));
+    cpu->cycles += 2;
+}
+
 static inline void x3a_ldd_a_mhl(emu_cpu *cpu) {
     cpu->reg.a = bus_read(get_HL());
     set_HL(get_HL() - 1);
     cpu->cycles += 2;
+}
+
+static inline void x3b_dec_sp(emu_cpu *cpu) {
+    cpu->reg.sp--;
+    cpu->cycles += 2;
+}
+
+static inline void x3c_inc_a(emu_cpu *cpu) {
+    inc_8(cpu, &cpu->reg.a);
+    cpu->cycles += 1;
+}
+
+static inline void x3d_dec_a(emu_cpu *cpu) {
+    dec_8(cpu, &cpu->reg.a);
+    cpu->cycles += 1;
 }
 
 static inline void x3e_ld_a_d8(emu_cpu *cpu) {
@@ -522,6 +699,48 @@ static inline void x7f_ld_a_a(emu_cpu *cpu) {
     cpu->cycles += 1;
 }
 
+static inline void x80_add_a_b(emu_cpu *cpu) {
+    cpu->reg.a = add_8(cpu->reg.a, cpu->reg.b);
+    cpu->cycles += 1;
+}
+
+static inline void x81_add_a_c(emu_cpu *cpu) {
+    cpu->reg.a = add_8(cpu->reg.a, cpu->reg.c);
+    cpu->cycles += 1;
+}
+
+static inline void x82_add_a_d(emu_cpu *cpu) {
+    cpu->reg.a = add_8(cpu->reg.a, cpu->reg.d);
+    cpu->cycles += 1;
+}
+
+static inline void x83_add_a_e(emu_cpu *cpu) {
+    cpu->reg.a = add_8(cpu->reg.a, cpu->reg.e);
+    cpu->cycles += 1;
+}
+
+static inline void x84_add_a_h(emu_cpu *cpu) {
+    cpu->reg.a = add_8(cpu->reg.a, cpu->reg.h);
+    cpu->cycles += 1;
+}
+
+static inline void x85_add_a_l(emu_cpu *cpu) {
+    cpu->reg.a = add_8(cpu->reg.a, cpu->reg.l);
+    cpu->cycles += 1;
+}
+
+static inline void x86_add_a_mhl(emu_cpu *cpu) {
+    uint8_t data = bus_read(get_HL());
+    cpu->cycles += 1;
+    cpu->reg.a = add_8(cpu->reg.a, data);
+    cpu->cycles += 1;
+}
+
+static inline void x87_add_a_a(emu_cpu *cpu) {
+    cpu->reg.a = add_8(cpu->reg.a, cpu->reg.a);
+    cpu->cycles += 1;
+}
+
 static inline void xb8_cp_b(emu_cpu *cpu) {
     cp_8(cpu->reg.a, cpu->reg.b);
     cpu->cycles += 1;
@@ -609,6 +828,13 @@ static inline void xc4_call_nz_a16(emu_cpu *cpu) {
 static inline void xc5_push_bc(emu_cpu *cpu) {
     push_16(cpu, get_BC());
     cpu->cycles += 4;
+}
+
+static inline void xc6_add_a_d8(emu_cpu *cpu) {
+    uint8_t d8 = read_d8(cpu);
+    cpu->cycles += 1;
+    cpu->reg.a = add_8(cpu->reg.a, d8);
+    cpu->cycles += 1;
 }
 
 static inline void xc7_rst_00h(emu_cpu *cpu) {
@@ -747,7 +973,7 @@ static inline void xdc_call_nc_a16(emu_cpu *cpu) {
     uint16_t a16 = read_d16(cpu);
     cpu->cycles += 2;
 
-    if (flag_C()) {
+    if (!flag_C()) {
         push_16(cpu, cpu->reg.pc);
         cpu->reg.pc = a16;
         cpu->cycles += 4;
@@ -783,6 +1009,19 @@ static inline void xe7_rst_20h(emu_cpu *cpu) {
     push_16(cpu, cpu->reg.pc);
     cpu->reg.pc = 0x0020;
     cpu->cycles += 4;
+}
+
+static inline void xe8_add_sp_r8(emu_cpu *cpu) {
+    int8_t   r8 = (int8_t)read_d8(cpu);
+    uint16_t sp = cpu->reg.sp;
+    uint16_t u8 = (uint16_t)(uint8_t)r8;
+    cpu->cycles += 1;
+    set_Z(0);
+    set_N(0);
+    set_H(((sp & 0x0F) + (u8 & 0x0F)) > 0x0F);
+    set_C(((sp & 0xFF) + (u8 & 0xFF)) > 0xFF);
+    cpu->reg.sp = sp + r8;
+    cpu->cycles += 3;
 }
 
 static inline void xe9_jp_hl(emu_cpu *cpu) {
@@ -837,13 +1076,15 @@ static inline void xf7_rst_30h(emu_cpu *cpu) {
 }
 
 static inline void xf8_ld_hl_sp_r8(emu_cpu *cpu) {
-    int8_t r8 = (int8_t)read_d8(cpu);
+    uint16_t sp = cpu->reg.sp;
+    int8_t   r8 = (int8_t)read_d8(cpu);
+    uint16_t u8 = (uint16_t)(uint8_t)r8;
     cpu->cycles += 1;
-    set_H(((cpu->reg.sp & 0x0F) + (r8 & 0x0F)) > 0x0F);
-    set_C(((cpu->reg.sp & 0xFF) + (r8 & 0xFF)) > 0xFF);
     set_Z(0);
     set_N(0);
-    set_HL(cpu->reg.sp + r8);
+    set_H(((sp & 0x0F) + (u8 & 0x0F)) > 0x0F);
+    set_C(((sp & 0xFF) + u8) > 0xFF);
+    set_HL(sp + r8);
     cpu->cycles += 2;
 }
 
@@ -872,21 +1113,21 @@ static inline void xff_rst_38h(emu_cpu *cpu) {
 
 // clang-format off
 const instruction_func_t instruction_set[16][16] = {
-    x00_nop, x01_ld_bc_d16, x02_ld_mbc_a, x00_nop, x00_nop, x00_nop, x06_ld_b_d8, x00_nop, x08_ld_a16_sp, x00_nop, x0a_ld_a_mbc, x00_nop, x00_nop, x00_nop, x0e_ld_c_d8, x00_nop,
-    x00_nop, x11_ld_de_d16, x12_ld_mde_a, x00_nop, x00_nop, x00_nop, x16_ld_d_d8, x00_nop, x18_jr_r8, x00_nop, x1a_ld_a_mde, x00_nop, x00_nop, x00_nop, x1e_ld_e_d8, x00_nop,
-    x20_jr_nz_r8, x21_ld_hl_d16, x22_ldi_mhl_a, x00_nop, x00_nop, x00_nop, x26_ld_h_d8, x00_nop, x28_jr_z_r8, x00_nop, x2a_ldi_a_mhl, x00_nop, x00_nop, x00_nop, x2e_ld_l_d8, x00_nop,
-    x30_jr_nc_r8, x31_ld_sp_d16, x32_ldd_mhl_a, x00_nop, x00_nop, x00_nop, x36_ld_mhl_d8, x00_nop, x38_jr_c_r8, x00_nop, x3a_ldd_a_mhl, x00_nop, x00_nop, x00_nop, x3e_ld_a_d8, x00_nop,
+    x00_nop, x01_ld_bc_d16, x02_ld_mbc_a, x03_inc_bc, x04_inc_b, x05_dec_b, x06_ld_b_d8, x00_nop, x08_ld_a16_sp, x09_add_hl_bc, x0a_ld_a_mbc, x0b_dec_bc, x0c_inc_c, x0d_dec_c, x0e_ld_c_d8, x00_nop,
+    x00_nop, x11_ld_de_d16, x12_ld_mde_a, x13_inc_de, x14_inc_d, x15_dec_d, x16_ld_d_d8, x00_nop, x18_jr_r8, x19_add_hl_de, x1a_ld_a_mde, x1b_dec_de, x1c_inc_e, x1d_dec_e, x1e_ld_e_d8, x00_nop,
+    x20_jr_nz_r8, x21_ld_hl_d16, x22_ldi_mhl_a, x23_inc_hl, x24_inc_h, x25_dec_h, x26_ld_h_d8, x00_nop, x28_jr_z_r8, x29_add_hl_hl, x2a_ldi_a_mhl, x2b_dec_hl, x2c_inc_l, x2d_dec_l, x2e_ld_l_d8, x00_nop,
+    x30_jr_nc_r8, x31_ld_sp_d16, x32_ldd_mhl_a, x33_inc_sp, x34_inc_mhl, x35_dec_mhl, x36_ld_mhl_d8, x00_nop, x38_jr_c_r8, x39_add_hl_sp, x3a_ldd_a_mhl, x3b_dec_sp, x3c_inc_a, x3d_dec_a, x3e_ld_a_d8, x00_nop,
     x40_ld_b_b, x41_ld_b_c, x42_ld_b_d, x43_ld_b_e, x44_ld_b_h, x45_ld_b_l, x46_ld_b_mhl, x47_ld_b_a, x48_ld_c_b, x49_ld_c_c, x4a_ld_c_d, x4b_ld_c_e, x4c_ld_c_h, x4d_ld_c_l, x4e_ld_c_mhl, x4f_ld_c_a,
     x50_ld_d_b, x51_ld_d_c, x52_ld_d_d, x53_ld_d_e, x54_ld_d_h, x55_ld_d_l, x56_ld_d_mhl, x57_ld_d_a, x58_ld_e_b, x59_ld_e_c, x5a_ld_e_d, x5b_ld_e_e, x5c_ld_e_h, x5d_ld_e_l, x5e_ld_e_mhl, x5f_ld_e_a,
     x60_ld_h_b, x61_ld_h_c, x62_ld_h_d, x63_ld_h_e, x64_ld_h_h, x65_ld_h_l, x66_ld_h_mhl, x67_ld_h_a, x68_ld_l_b, x69_ld_l_c, x6a_ld_l_d, x6b_ld_l_e, x6c_ld_l_h, x6d_ld_l_l, x6e_ld_l_mhl, x6f_ld_l_a,
     x70_ld_mhl_b, x71_ld_mhl_c, x72_ld_mhl_d, x73_ld_mhl_e, x74_ld_mhl_h, x75_ld_mhl_l, x00_nop, x77_ld_mhl_a, x78_ld_a_b, x79_ld_a_c, x7a_ld_a_d, x7b_ld_a_e, x7c_ld_a_h, x7d_ld_a_l, x7e_ld_a_mhl, x7f_ld_a_a,
-    x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop,
+    x80_add_a_b, x81_add_a_c, x82_add_a_d, x83_add_a_e, x84_add_a_h, x85_add_a_l, x86_add_a_mhl, x87_add_a_a, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop,
     x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop,
     x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop,
     x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, x00_nop, xb8_cp_b, xb9_cp_c, xba_cp_d, xbb_cp_e, xbc_cp_h, xbd_cp_l, xbe_cp_mhl, xbf_cp_a,
-    xc0_ret_nz, xc1_pop_bc, xc2_jp_nz_a16, xc3_jp_a16, xc4_call_nz_a16, xc5_push_bc, x00_nop, xc7_rst_00h, xc8_ret_z, xc9_ret, xca_jp_z_a16, x00_nop, xcc_call_z_a16, xcd_call_a16, x00_nop, xcf_rst_08h,
+    xc0_ret_nz, xc1_pop_bc, xc2_jp_nz_a16, xc3_jp_a16, xc4_call_nz_a16, xc5_push_bc, xc6_add_a_d8, xc7_rst_00h, xc8_ret_z, xc9_ret, xca_jp_z_a16, x00_nop, xcc_call_z_a16, xcd_call_a16, x00_nop, xcf_rst_08h,
     xd0_ret_nc, xd1_pop_de, xd2_jp_nc_a16, x00_nop, xd4_call_nc_a16, xd5_push_de, x00_nop, xd7_rst_10h, xd8_ret_c, xd9_reti, xda_jp_c_a16, x00_nop, xdc_call_nc_a16, x00_nop, x00_nop, xdf_rst_18h,
-    xe0_ldh_m8_a, xe1_pop_hl, xe2_ld_mc_a, x00_nop, x00_nop, xe5_push_hl, x00_nop, xe7_rst_20h, x00_nop, xe9_jp_hl, xea_ld_a16_a, x00_nop, x00_nop, x00_nop, x00_nop, xef_rst_28h,
+    xe0_ldh_m8_a, xe1_pop_hl, xe2_ld_mc_a, x00_nop, x00_nop, xe5_push_hl, x00_nop, xe7_rst_20h, xe8_add_sp_r8, xe9_jp_hl, xea_ld_a16_a, x00_nop, x00_nop, x00_nop, x00_nop, xef_rst_28h,
     xf0_ldh_a_m8, xf1_pop_af, xf2_ld_a_mc, x00_nop, x00_nop, xf5_push_af, x00_nop, xf7_rst_30h, xf8_ld_hl_sp_r8, xf9_ld_sp_hl, xfa_ld_a_a16, x00_nop, x00_nop, x00_nop, xfe_cp_d8, xff_rst_38h,
 };
 // clang-format on
