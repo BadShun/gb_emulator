@@ -38,7 +38,6 @@ void cpu_step() {
 }
 
 void enable_interrupt() {
-
 }
 
 uint16_t get_AF() {

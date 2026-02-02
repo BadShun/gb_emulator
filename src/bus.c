@@ -65,23 +65,29 @@ uint8_t bus_read(uint16_t addr) {
 void bus_write(uint16_t addr, uint8_t data) {
     if (addr <= 0x7FFF) { // cart rom
         cart_mem_write(addr, data);
+        return;
     }
 
     if (addr <= 0x9FFF) { // vram
         vram[addr - 0x8000] = data;
+        return;
     }
 
     if (addr <= 0xBFFF) { // cart ram
         cart_mem_write(addr, data);
+        return;
     }
 
     if (addr <= 0xDFFF) { // work ram
         wram[addr - 0xC000] = data;
+        return;
     }
 
     if (addr >= 0xFF80 && addr <= 0xFFFE) { // high ram
         hram[addr - 0xFF80] = data;
+        return;
     }
 
     printf("unsupport bus write address 0x%04X\n", addr);
+    return;
 }

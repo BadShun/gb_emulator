@@ -2,7 +2,10 @@
 #include "bus.h"
 #include "cpu.h"
 
+#include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <unistd.h>
 
 static inline uint8_t read_d8(emu_cpu *cpu) {
     uint8_t d8 = bus_read(cpu->reg.pc);
@@ -125,6 +128,95 @@ static inline uint8_t or_8(uint8_t v1, uint8_t v2) {
     return r;
 }
 
+static inline void rlc_8(uint8_t *v) {
+    bool carry = (*v & 0x80) != 0;
+    *v <<= 1;
+    *v |= carry;
+    set_C(carry);
+    set_Z(*v == 0);
+    set_N(0);
+    set_H(0);
+}
+
+static inline void rrc_8(uint8_t *v) {
+    bool carry = (*v & 0x01) != 0;
+    *v >>= 1;
+    *v |= (carry << 7);
+    set_C(carry);
+    set_Z(*v == 0);
+    set_N(0);
+    set_H(0);
+}
+
+static inline void rl_8(uint8_t *v) {
+    bool carry = (*v & 0x80) != 0;
+    *v <<= 1;
+    *v |= flag_C();
+    set_C(carry);
+    set_Z(*v == 0);
+    set_N(0);
+    set_H(0);
+}
+
+static inline void rr_8(uint8_t *v) {
+    bool carry = (*v & 0x01) != 0;
+    *v >>= 1;
+    *v |= (flag_C() << 7);
+    set_C(carry);
+    set_Z(*v == 0);
+    set_N(0);
+    set_H(0);
+}
+
+static inline void sla_8(uint8_t *v) {
+    bool carry = (*v & 0x80) != 0;
+    *v <<= 1;
+    set_C(carry);
+    set_Z(*v == 0);
+    set_N(0);
+    set_H(0);
+}
+
+static inline void sra_8(uint8_t *v) {
+    bool carry = (*v & 0x01) != 0;
+    *v = (*v & 0x80) | ((*v >> 1) & 0x7F);
+    set_C(carry);
+    set_Z(*v == 0);
+    set_N(0);
+    set_H(0);
+}
+
+static inline void srl_8(uint8_t *v) {
+    bool carry = (*v & 0x01) != 0;
+    *v = (*v >> 1) & 0x7F;
+    set_C(carry);
+    set_Z(*v == 0);
+    set_N(0);
+    set_H(0);
+}
+
+static inline void swap_8(uint8_t *v) {
+    *v = ((*v >> 4) & 0x0F) | ((*v << 4) & 0xF0);
+    set_C(0);
+    set_Z(*v == 0);
+    set_N(0);
+    set_H(0);
+}
+
+static inline void bit_8(uint8_t v, uint8_t bit) {
+    set_Z(((v >> bit) & 0x01) == 0);
+    set_N(0);
+    set_H(1);
+}
+
+static inline void res_8(uint8_t *v, uint8_t bit) {
+    *v &= ~(0x01 << bit);
+}
+
+static inline void set_8(uint8_t *v, uint8_t bit) {
+    *v |= (0x01 << bit);
+}
+
 static inline void x00_nop(emu_cpu *cpu) {
     cpu->cycles += 1;
 }
@@ -157,6 +249,12 @@ static inline void x05_dec_b(emu_cpu *cpu) {
 static inline void x06_ld_b_d8(emu_cpu *cpu) {
     cpu->reg.b = read_d8(cpu);
     cpu->cycles += 2;
+}
+
+static inline void x07_rlca(emu_cpu *cpu) {
+    rlc_8(&cpu->reg.a);
+    set_Z(0);
+    cpu->cycles += 1;
 }
 
 static inline void x08_ld_a16_sp(emu_cpu *cpu) {
@@ -198,6 +296,19 @@ static inline void x0e_ld_c_d8(emu_cpu *cpu) {
     cpu->cycles += 2;
 }
 
+static inline void x0f_rrca(emu_cpu *cpu) {
+    rrc_8(&cpu->reg.a);
+    set_Z(0);
+    cpu->cycles += 1;
+}
+
+static inline void x10_stop(emu_cpu *cpu) {
+    read_d8(cpu);
+    printf("emulator stop!\n");
+    cpu->cycles += 1;
+    _exit(0);
+}
+
 static inline void x11_ld_de_d16(emu_cpu *cpu) {
     set_DE(read_d16(cpu));
     cpu->cycles += 3;
@@ -226,6 +337,12 @@ static inline void x15_dec_d(emu_cpu *cpu) {
 static inline void x16_ld_d_d8(emu_cpu *cpu) {
     cpu->reg.d = read_d8(cpu);
     cpu->cycles += 2;
+}
+
+static inline void x17_rla(emu_cpu *cpu) {
+    rl_8(&cpu->reg.a);
+    set_Z(0);
+    cpu->cycles += 1;
 }
 
 static inline void x18_jr_r8(emu_cpu *cpu) {
@@ -262,6 +379,12 @@ static inline void x1d_dec_e(emu_cpu *cpu) {
 static inline void x1e_ld_e_d8(emu_cpu *cpu) {
     cpu->reg.e = read_d8(cpu);
     cpu->cycles += 2;
+}
+
+static inline void x1f_rra(emu_cpu *cpu) {
+    rr_8(&cpu->reg.a);
+    set_Z(0);
+    cpu->cycles += 1;
 }
 
 static inline void x20_jr_nz_r8(emu_cpu *cpu) {
@@ -768,6 +891,11 @@ static inline void x75_ld_mhl_l(emu_cpu *cpu) {
     cpu->cycles += 2;
 }
 
+static inline void x76_halt(emu_cpu *cpu) {
+    cpu->halted = true;
+    cpu->cycles += 1;
+}
+
 static inline void x77_ld_mhl_a(emu_cpu *cpu) {
     bus_write(get_HL(), cpu->reg.a);
     cpu->cycles += 2;
@@ -1234,6 +1362,67 @@ static inline void xca_jp_z_a16(emu_cpu *cpu) {
     }
 }
 
+static inline void xcb_prefix_cb(emu_cpu *cpu) {
+    uint8_t op = read_d8(cpu);
+    cpu->cycles += 1;
+    uint8_t data_bits = op & 0x07;
+    uint8_t data = 0;
+
+    switch (data_bits) {
+        case 0: data = cpu->reg.b; break;
+        case 1: data = cpu->reg.c; break;
+        case 2: data = cpu->reg.d; break;
+        case 3: data = cpu->reg.e; break;
+        case 4: data = cpu->reg.h; break;
+        case 5: data = cpu->reg.l; break;
+        case 6: data = bus_read(get_HL()); cpu->cycles += 1; break;
+        case 7: data = cpu->reg.a; break;
+        default: printf("unknown data bit 0x%02x\n", data_bits);_exit(1); break;
+    }
+
+    uint8_t op_bits = (op & 0xF8) >> 3;
+
+    if (op_bits == 0) {
+        rlc_8(&data);
+    } else if (op_bits == 1) {
+        rrc_8(&data);
+    } else if (op_bits == 2) {
+        rl_8(&data);
+    } else if (op_bits == 3) {
+        rr_8(&data);
+    } else if (op_bits == 4) {
+        sla_8(&data);
+    } else if (op_bits == 5) {
+        sra_8(&data);
+    } else if (op_bits == 6) {
+        swap_8(&data);
+    } else if (op_bits == 7) {
+        srl_8(&data);
+    } else if (op_bits <= 0x0F) {
+        bit_8(data, op_bits - 0x08);
+    } else if (op_bits <= 0x17) {
+        res_8(&data, op_bits - 0x10);
+    } else if (op_bits <= 0x1F) {
+        set_8(&data, op_bits - 0x18);
+    }
+
+    if (op_bits <= 0x07 || op_bits >= 0x10) {
+        switch (data_bits) {
+            case 0: cpu->reg.b = data; break;
+            case 1: cpu->reg.c = data; break;
+            case 2: cpu->reg.d = data; break;
+            case 3: cpu->reg.e = data; break;
+            case 4: cpu->reg.h = data; break;
+            case 5: cpu->reg.l = data; break;
+            case 6: bus_write(get_HL(), data); cpu->cycles += 1; break;
+            case 7: cpu->reg.a = data; break;
+            default: printf("unknown data bit 0x%02x\n", data_bits);_exit(1); break;
+        }
+    }
+
+    cpu->cycles += 1;
+}
+
 static inline void xcc_call_z_a16(emu_cpu *cpu) {
     uint16_t a16 = read_d16(cpu);
     cpu->cycles += 2;
@@ -1521,19 +1710,19 @@ static inline void xff_rst_38h(emu_cpu *cpu) {
 
 // clang-format off
 const instruction_func_t instruction_set[16][16] = {
-    x00_nop, x01_ld_bc_d16, x02_ld_mbc_a, x03_inc_bc, x04_inc_b, x05_dec_b, x06_ld_b_d8, x00_nop, x08_ld_a16_sp, x09_add_hl_bc, x0a_ld_a_mbc, x0b_dec_bc, x0c_inc_c, x0d_dec_c, x0e_ld_c_d8, x00_nop,
-    x00_nop, x11_ld_de_d16, x12_ld_mde_a, x13_inc_de, x14_inc_d, x15_dec_d, x16_ld_d_d8, x00_nop, x18_jr_r8, x19_add_hl_de, x1a_ld_a_mde, x1b_dec_de, x1c_inc_e, x1d_dec_e, x1e_ld_e_d8, x00_nop,
+    x00_nop, x01_ld_bc_d16, x02_ld_mbc_a, x03_inc_bc, x04_inc_b, x05_dec_b, x06_ld_b_d8, x07_rlca, x08_ld_a16_sp, x09_add_hl_bc, x0a_ld_a_mbc, x0b_dec_bc, x0c_inc_c, x0d_dec_c, x0e_ld_c_d8, x0f_rrca,
+    x10_stop, x11_ld_de_d16, x12_ld_mde_a, x13_inc_de, x14_inc_d, x15_dec_d, x16_ld_d_d8, x17_rla, x18_jr_r8, x19_add_hl_de, x1a_ld_a_mde, x1b_dec_de, x1c_inc_e, x1d_dec_e, x1e_ld_e_d8, x1f_rra,
     x20_jr_nz_r8, x21_ld_hl_d16, x22_ldi_mhl_a, x23_inc_hl, x24_inc_h, x25_dec_h, x26_ld_h_d8, x27_daa, x28_jr_z_r8, x29_add_hl_hl, x2a_ldi_a_mhl, x2b_dec_hl, x2c_inc_l, x2d_dec_l, x2e_ld_l_d8, x2f_cpl,
     x30_jr_nc_r8, x31_ld_sp_d16, x32_ldd_mhl_a, x33_inc_sp, x34_inc_mhl, x35_dec_mhl, x36_ld_mhl_d8, x37_scf, x38_jr_c_r8, x39_add_hl_sp, x3a_ldd_a_mhl, x3b_dec_sp, x3c_inc_a, x3d_dec_a, x3e_ld_a_d8, x3f_ccf,
     x40_ld_b_b, x41_ld_b_c, x42_ld_b_d, x43_ld_b_e, x44_ld_b_h, x45_ld_b_l, x46_ld_b_mhl, x47_ld_b_a, x48_ld_c_b, x49_ld_c_c, x4a_ld_c_d, x4b_ld_c_e, x4c_ld_c_h, x4d_ld_c_l, x4e_ld_c_mhl, x4f_ld_c_a,
     x50_ld_d_b, x51_ld_d_c, x52_ld_d_d, x53_ld_d_e, x54_ld_d_h, x55_ld_d_l, x56_ld_d_mhl, x57_ld_d_a, x58_ld_e_b, x59_ld_e_c, x5a_ld_e_d, x5b_ld_e_e, x5c_ld_e_h, x5d_ld_e_l, x5e_ld_e_mhl, x5f_ld_e_a,
     x60_ld_h_b, x61_ld_h_c, x62_ld_h_d, x63_ld_h_e, x64_ld_h_h, x65_ld_h_l, x66_ld_h_mhl, x67_ld_h_a, x68_ld_l_b, x69_ld_l_c, x6a_ld_l_d, x6b_ld_l_e, x6c_ld_l_h, x6d_ld_l_l, x6e_ld_l_mhl, x6f_ld_l_a,
-    x70_ld_mhl_b, x71_ld_mhl_c, x72_ld_mhl_d, x73_ld_mhl_e, x74_ld_mhl_h, x75_ld_mhl_l, x00_nop, x77_ld_mhl_a, x78_ld_a_b, x79_ld_a_c, x7a_ld_a_d, x7b_ld_a_e, x7c_ld_a_h, x7d_ld_a_l, x7e_ld_a_mhl, x7f_ld_a_a,
+    x70_ld_mhl_b, x71_ld_mhl_c, x72_ld_mhl_d, x73_ld_mhl_e, x74_ld_mhl_h, x75_ld_mhl_l, x76_halt, x77_ld_mhl_a, x78_ld_a_b, x79_ld_a_c, x7a_ld_a_d, x7b_ld_a_e, x7c_ld_a_h, x7d_ld_a_l, x7e_ld_a_mhl, x7f_ld_a_a,
     x80_add_a_b, x81_add_a_c, x82_add_a_d, x83_add_a_e, x84_add_a_h, x85_add_a_l, x86_add_a_mhl, x87_add_a_a, x88_adc_a_b, x89_adc_a_c, x8a_adc_a_d, x8b_adc_a_e, x8c_adc_a_h, x8d_adc_a_l, x8e_adc_a_mhl, x8f_adc_a_a,
     x90_sub_b, x91_sub_c, x92_sub_d, x93_sub_e, x94_sub_h, x95_sub_l, x96_sub_mhl, x97_sub_a, x98_sbc_a_b, x99_sbc_a_c, x9a_sbc_a_d, x9b_sbc_a_e, x9c_sbc_a_h, x9d_sbc_a_l, x9e_sbc_a_mhl, x9f_sbc_a_a,
     xa0_and_b, xa1_and_c, xa2_and_d, xa3_and_e, xa4_and_h, xa5_and_l, xa6_and_mhl, xa7_and_a, xa8_xor_b, xa9_xor_c, xaa_xor_d, xab_xor_e, xac_xor_h, xad_xor_l, xae_xor_mhl, xaf_xor_a,
     xb0_or_b, xb1_or_c, xb2_or_d, xb3_or_e, xb4_or_h, xb5_or_l, xb6_or_mhl, xb7_or_a, xb8_cp_b, xb9_cp_c, xba_cp_d, xbb_cp_e, xbc_cp_h, xbd_cp_l, xbe_cp_mhl, xbf_cp_a,
-    xc0_ret_nz, xc1_pop_bc, xc2_jp_nz_a16, xc3_jp_a16, xc4_call_nz_a16, xc5_push_bc, xc6_add_a_d8, xc7_rst_00h, xc8_ret_z, xc9_ret, xca_jp_z_a16, x00_nop, xcc_call_z_a16, xcd_call_a16, xce_adc_a_d8, xcf_rst_08h,
+    xc0_ret_nz, xc1_pop_bc, xc2_jp_nz_a16, xc3_jp_a16, xc4_call_nz_a16, xc5_push_bc, xc6_add_a_d8, xc7_rst_00h, xc8_ret_z, xc9_ret, xca_jp_z_a16, xcb_prefix_cb, xcc_call_z_a16, xcd_call_a16, xce_adc_a_d8, xcf_rst_08h,
     xd0_ret_nc, xd1_pop_de, xd2_jp_nc_a16, x00_nop, xd4_call_nc_a16, xd5_push_de, xd6_sub_d8, xd7_rst_10h, xd8_ret_c, xd9_reti, xda_jp_c_a16, x00_nop, xdc_call_c_a16, x00_nop, xde_sbc_a_d8, xdf_rst_18h,
     xe0_ldh_m8_a, xe1_pop_hl, xe2_ld_mc_a, x00_nop, x00_nop, xe5_push_hl, xe6_and_d8, xe7_rst_20h, xe8_add_sp_r8, xe9_jp_hl, xea_ld_a16_a, x00_nop, x00_nop, x00_nop, xee_xor_d8, xef_rst_28h,
     xf0_ldh_a_m8, xf1_pop_af, xf2_ld_a_mc, x00_nop, x00_nop, xf5_push_af, xf6_or_d8, xf7_rst_30h, xf8_ld_hl_sp_r8, xf9_ld_sp_hl, xfa_ld_a_a16, x00_nop, x00_nop, x00_nop, xfe_cp_d8, xff_rst_38h,

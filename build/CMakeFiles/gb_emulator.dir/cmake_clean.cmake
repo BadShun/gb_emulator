@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/gb_emulator.dir/src/cpu.c.o.d"
   "CMakeFiles/gb_emulator.dir/src/instructions.c.o"
   "CMakeFiles/gb_emulator.dir/src/instructions.c.o.d"
+  "CMakeFiles/gb_emulator.dir/src/interrupt.c.o"
+  "CMakeFiles/gb_emulator.dir/src/interrupt.c.o.d"
   "CMakeFiles/gb_emulator.dir/src/main.c.o"
   "CMakeFiles/gb_emulator.dir/src/main.c.o.d"
   "gb_emulator"

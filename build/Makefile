@@ -225,6 +225,30 @@ src/instructions.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/instructions.c.s
 .PHONY : src/instructions.c.s
 
+src/interrupt.o: src/interrupt.c.o
+.PHONY : src/interrupt.o
+
+# target to build an object file
+src/interrupt.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/interrupt.c.o
+.PHONY : src/interrupt.c.o
+
+src/interrupt.i: src/interrupt.c.i
+.PHONY : src/interrupt.i
+
+# target to preprocess a source file
+src/interrupt.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/interrupt.c.i
+.PHONY : src/interrupt.c.i
+
+src/interrupt.s: src/interrupt.c.s
+.PHONY : src/interrupt.s
+
+# target to generate assembly for a file
+src/interrupt.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gb_emulator.dir/build.make CMakeFiles/gb_emulator.dir/src/interrupt.c.s
+.PHONY : src/interrupt.c.s
+
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -270,6 +294,9 @@ help:
 	@echo "... src/instructions.o"
 	@echo "... src/instructions.i"
 	@echo "... src/instructions.s"
+	@echo "... src/interrupt.o"
+	@echo "... src/interrupt.i"
+	@echo "... src/interrupt.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
